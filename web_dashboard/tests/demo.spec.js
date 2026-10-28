@@ -1,0 +1,83 @@
+const { test, expect } = require('@playwright/test');
+const path = require('path');
+const ROOT = path.resolve(__dirname, '../..');
+
+test('teacher walkthrough with external network blocked', async ({ page }) => {
+  const external = [], errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.route('**/*', route => {
+    const host = new URL(route.request().url()).hostname;
+    if (host === 'localhost' || host === '127.0.0.1') return route.continue();
+    external.push(route.request().url());
+    return route.abort('internetdisconnected');
+  });
+  await page.goto('/');
+  await expect(page.locator('#event-count')).toHaveText('92');
+  await expect(page.locator('#sensor-count')).toHaveText('3');
+  await expect(page.locator('#reduced-count')).toHaveText('73');
+  await expect(page.locator('#graph canvas')).toBeVisible();
+  await page.locator('#reduced').click();
+  await expect(page.locator('#reduced')).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Expand 20 identical reads' }).click();
+  await expect(page.locator('#evidence-title')).toHaveText('20 original events');
+  await expect(page.locator('#evidence')).toContainText('repeated-read-00');
+  await expect(page.locator('#evidence')).toContainText('repeated-read-19');
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: path.join(ROOT, 'output/review2-dashboard.png'), fullPage: true });
+  await page.getByRole('button', { name: /Attack reconstruction/ }).click();
+  await expect(page.locator('#sensors')).toContainText('edge-actuator-03');
+  await expect(page.locator('#timeline tbody tr')).toHaveCount(14);
+  await expect(page.locator('#vectors tbody tr')).toHaveCount(3);
+  await page.getByRole('button', { name: /Placement model/ }).click();
+  await expect(page.locator('#panel-placement')).toContainText('Cost-model estimates');
+  await page.getByRole('button', { name: /SQL workspace/ }).click();
+  await page.locator('#count-sql').click();
+  await page.locator('#run-sql').click();
+  await expect(page.locator('#sql-result tbody')).toHaveText('92');
+  await page.locator('#dataset').selectOption('normal');
+  await expect(page.locator('#event-count')).toHaveText('16');
+  await expect(page.locator('#sensor-count')).toHaveText('0');
+  await expect(page.locator('#sql-result')).toBeEmpty();
+  await page.locator('#run-sql').click();
+  await expect(page.locator('#sql-result tbody')).toHaveText('16');
+  await page.getByRole('button', { name: /Attack reconstruction/ }).click();
+  await expect(page.locator('#paths-summary')).toContainText('No attack-labelled incident');
+  await page.locator('#file').setInputFiles(path.join(ROOT, 'data/demo/attack.csv'));
+  await page.locator('#upload').click();
+  await expect(page.locator('#event-count')).toHaveText('70');
+  await expect(page.locator('#sensor-count')).toHaveText('3');
+  const datasetId = await page.locator('#dataset').inputValue();
+  expect(datasetId).toMatch(/^ds-[0-9a-f]{64}$/);
+  await page.locator('#reload').click();
+  await expect(page.locator('#notice')).not.toHaveText(/Validating/);
+  await expect(page.locator('#dataset')).toHaveValue(datasetId);
+  await page.getByRole('button', { name: /SQL workspace/ }).click();
+  await page.locator('#run-sql').click();
+  await expect(page.locator('#sql-result tbody')).toHaveText('70');
+  await page.locator('#file').setInputFiles({ name: 'invalid.json', mimeType: 'application/json', buffer: Buffer.from('[{"uuid":"bad","tier":"Edge","host_id":"test"}]') });
+  await page.locator('#upload').click();
+  await expect(page.locator('#error')).toBeVisible();
+  await expect(page.locator('#error')).toContainText('Row 1');
+  await expect(page.locator('#event-count')).toHaveText('70');
+  expect(external).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('dataset identity survives a server reload path and bad requests are explicit', async ({ request }) => {
+  const loaded = await request.get('/api/analyze?dataset=attack');
+  expect(loaded.ok()).toBeTruthy();
+  const data = await loaded.json();
+  const persisted = await request.get(`/api/analyze?dataset=${data.dataset_id}&force=true`);
+  expect((await persisted.json()).dataset_id).toBe(data.dataset_id);
+  for (const [selection, expected] of [['normal', 16], ['repeated', 92], [data.dataset_id, 70]]) {
+    const res = await request.get(`/api/analyze?dataset=${selection}`);
+    const selected = await res.json();
+    const sql = await request.post('/api/sql', { data: { dataset_id: selected.dataset_id, query: 'SELECT COUNT(*) AS n FROM provenance' } });
+    expect((await sql.json()).rows).toEqual([{ n: expected }]);
+  }
+  const unavailable = await request.get('/api/analyze?dataset=darpa_optc');
+  expect(unavailable.status()).toBe(400);
+  expect((await unavailable.json()).message).toContain('not bundled');
+  const unsafe = await request.post('/api/sql', { data: { dataset_id: data.dataset_id, query: 'DELETE FROM provenance' } });
+  expect(unsafe.status()).toBe(400);
+});

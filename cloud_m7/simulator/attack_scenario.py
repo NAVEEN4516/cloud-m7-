@@ -541,7 +541,8 @@ class MultiTierAttackSimulator:
         # ==============================================================
         # Vector 3: Industrial Actuator (edge-actuator-03) Modbus Exploit
         # ==============================================================
-        t += 0.5
+        # Third source must arrive before the shared fog execution, not after it.
+        t = base_time + 6.1
         v3_edge_exploit = ProvenanceEvent(
             uuid="atk3-edge-01-plc-exploit",
             timestamp=t,

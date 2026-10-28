@@ -1,0 +1,1654 @@
+[
+  {
+    "uuid": "benign-edge-read-0",
+    "timestamp": 1700000000.5,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "d6f27aa32b6f6db9ac65c8c889b175538cab44d27c64f70c085f1b8ce3088a6d"
+  },
+  {
+    "uuid": "benign-edge-sock-out-0",
+    "timestamp": 1700000000.7,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39000,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-0"
+    ],
+    "tamper_hash": "99bf1b85159e9f7601d3ab561113323db3a0f4b84817408a97f836efc7e3182a"
+  },
+  {
+    "uuid": "benign-edge-read-1",
+    "timestamp": 1700000001.2,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "8c9d92e797a1865e825b5e1b265f1b4b79d1b3084f4ff8a837eb0df5df16e191"
+  },
+  {
+    "uuid": "benign-edge-sock-out-1",
+    "timestamp": 1700000001.4,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39001,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-1"
+    ],
+    "tamper_hash": "f87c0c63e4214c83a8b5d7b840184e54db2648177ce7e9e10d372fac46605efd"
+  },
+  {
+    "uuid": "benign-edge-read-2",
+    "timestamp": 1700000001.9,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "ffa40757b377b6337dc06ed910134160365da51e3f92e78f291f7070256de677"
+  },
+  {
+    "uuid": "benign-edge-sock-out-2",
+    "timestamp": 1700000002.1000001,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39002,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-2"
+    ],
+    "tamper_hash": "42e1eaaeb739b2d1d47776e733f2e5f1f401f1b07eae2277de89d752428bea62"
+  },
+  {
+    "uuid": "benign-edge-read-3",
+    "timestamp": 1700000002.6000001,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "61c396da2cd395c9de9c0d3f60a1330a0699e13d570b73f40cc8651c6be4aeda"
+  },
+  {
+    "uuid": "benign-edge-sock-out-3",
+    "timestamp": 1700000002.8000002,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39003,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-3"
+    ],
+    "tamper_hash": "b2d17ef40ca5102298518e5967819a2ed454cda300ec41638376dbb80eeefa01"
+  },
+  {
+    "uuid": "benign-edge-read-4",
+    "timestamp": 1700000003.3000002,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "54e5a77a6b1733e26525f1dcb1a482c056eacff3e6f1dddef6e9a1fd329a617f"
+  },
+  {
+    "uuid": "benign-edge-sock-out-4",
+    "timestamp": 1700000003.5000002,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39004,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-4"
+    ],
+    "tamper_hash": "e26f1cb36788ca51393536526b9952102913aa1d15ae38f11eabfa0564442f0e"
+  },
+  {
+    "uuid": "benign-edge-read-5",
+    "timestamp": 1700000004.0000002,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "93e83a5bca77eb8ef9a7da93f1229b7a4f4cb049e8a4874fb1cc2cfb285c5a4d"
+  },
+  {
+    "uuid": "benign-edge-sock-out-5",
+    "timestamp": 1700000004.2000003,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39005,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-5"
+    ],
+    "tamper_hash": "6bf13d586c495600d9b0a87155c282185ea857ada53706474f7abc03f2df9f77"
+  },
+  {
+    "uuid": "benign-edge-read-6",
+    "timestamp": 1700000004.7000003,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "fde4403f4d3416192957aac365310b863772380e4b9afff47b3281540101d2fb"
+  },
+  {
+    "uuid": "benign-edge-sock-out-6",
+    "timestamp": 1700000004.9000003,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39006,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-6"
+    ],
+    "tamper_hash": "02a21cf106ed32d6006f479b9290ffb83b7af526b86b1e2e3245812e1d307f20"
+  },
+  {
+    "uuid": "atk-edge-01-exploit",
+    "timestamp": 1700000005.0,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "/usr/bin/iot_agent",
+      "pid": 1102,
+      "is_attack": true,
+      "description": "Vulnerable IoT agent memory corruption exploit triggered"
+    },
+    "parents": [],
+    "tamper_hash": "b53cfa94a93e53f9ec7a68c6ec7ee8c2faedefc6523fbc915e4d23af57541e18"
+  },
+  {
+    "uuid": "atk-edge-02-shell",
+    "timestamp": 1700000005.3,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "fork",
+      "entity": "/bin/sh",
+      "pid": 1188,
+      "is_attack": true,
+      "description": "Shell process spawned with elevated root privileges"
+    },
+    "parents": [
+      "atk-edge-01-exploit"
+    ],
+    "tamper_hash": "36a741ed5f9d6bfde8b7d15315418f51ca8339ef86b4bc469aaad6d80a906295"
+  },
+  {
+    "uuid": "benign-edge-read-7",
+    "timestamp": 1700000005.4000003,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "efe4e6a41811f175a8cdab2ca6cdc9b494ce5b8a8585f34b039d09fb4384777e"
+  },
+  {
+    "uuid": "benign-edge-sock-out-7",
+    "timestamp": 1700000005.6000004,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39007,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-7"
+    ],
+    "tamper_hash": "7530ef40291bff84bfa6e24afc0c13cf2d16d4fc0884ff5907e4ca380a21d324"
+  },
+  {
+    "uuid": "atk-edge-03-drop",
+    "timestamp": 1700000005.7,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "write",
+      "entity": "/tmp/.pivot_beacon.sh",
+      "size_bytes": 4096,
+      "is_attack": true,
+      "description": "Dropped staging lateral-movement script on local filesystem"
+    },
+    "parents": [
+      "atk-edge-02-shell"
+    ],
+    "tamper_hash": "051000eb0a5f18bc2b66b400c67cc14ad8d0e7dcf7f1645a2e8ff9ea48333ac9"
+  },
+  {
+    "uuid": "atk-edge-04-creds",
+    "timestamp": 1700000005.9,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/etc/iot/fog_gateway_token.key",
+      "is_attack": true,
+      "description": "Exfiltrated internal Fog gateway authentication token"
+    },
+    "parents": [
+      "atk-edge-03-drop"
+    ],
+    "tamper_hash": "40582127a895e1fae61fa7b03ce730d97d18e5aac24fa5011f8ac543df110cde"
+  },
+  {
+    "uuid": "atk2-edge-01-fw-exploit",
+    "timestamp": 1700000006.0,
+    "tier": "Edge",
+    "host_id": "edge-sensor-02",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "/usr/sbin/fw_updater",
+      "pid": 890,
+      "is_attack": true,
+      "description": "Secondary IoT sensor firmware command-injection exploit"
+    },
+    "parents": [],
+    "tamper_hash": "f4dd697fe9eb84b44ca12a311e34652bde0892fdf1b7c1366e9ab407a9ee95b9"
+  },
+  {
+    "uuid": "atk3-edge-01-plc-exploit",
+    "timestamp": 1700000006.1,
+    "tier": "Edge",
+    "host_id": "edge-actuator-03",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "/usr/bin/modbus_controller",
+      "pid": 504,
+      "is_attack": true,
+      "description": "Unauthorized industrial actuator Modbus control injection"
+    },
+    "parents": [],
+    "tamper_hash": "ab41194de350d7f8f2516dc9c7fb3a2a104fa902abfd420345bfcec2a1831817"
+  },
+  {
+    "uuid": "benign-edge-read-8",
+    "timestamp": 1700000006.1000004,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "77d6a0397a684d27975930098abdcf88e9b5f0d338ada9c5c8934d0ae16989b9"
+  },
+  {
+    "uuid": "atk2-edge-02-shell",
+    "timestamp": 1700000006.3,
+    "tier": "Edge",
+    "host_id": "edge-sensor-02",
+    "event_type": "Process",
+    "payload": {
+      "action": "fork",
+      "entity": "/bin/sh",
+      "pid": 912,
+      "is_attack": true,
+      "description": "Stealth shell spawned on secondary edge sensor"
+    },
+    "parents": [
+      "atk2-edge-01-fw-exploit"
+    ],
+    "tamper_hash": "241b567665698f05fb272acb33795cf70d42e5e20add733a2f7e6bfd598cf240"
+  },
+  {
+    "uuid": "atk3-edge-02-socket-out",
+    "timestamp": 1700000006.3,
+    "tier": "Edge",
+    "host_id": "edge-actuator-03",
+    "event_type": "Socket",
+    "payload": {
+      "action": "connect",
+      "src_ip": "192.168.1.52",
+      "src_port": 50200,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "is_attack": true,
+      "description": "Outbound rogue telemetry flow from actuator to Fog gateway"
+    },
+    "parents": [
+      "atk3-edge-01-plc-exploit"
+    ],
+    "tamper_hash": "6e3afdca9206b3d43cededd273e15a30a52a4acb415b963148146b8229fa84fb"
+  },
+  {
+    "uuid": "benign-edge-sock-out-8",
+    "timestamp": 1700000006.3000004,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39008,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-8"
+    ],
+    "tamper_hash": "4c18e75f7a9b3ad5ad12475407ee1d74f2cd3276cc9b7881e1d4a89382f2ac5e"
+  },
+  {
+    "uuid": "atk3-fog-01-socket-in",
+    "timestamp": 1700000006.315,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "accept",
+      "src_ip": "192.168.1.52",
+      "src_port": 50200,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "is_attack": true,
+      "description": "Fog gateway ingress accepts connection from corrupted actuator"
+    },
+    "parents": [],
+    "tamper_hash": "9d649caeff5a8098d81fe41ba995b4e3ccf71663e224ec7ce4dddba7de393ddf"
+  },
+  {
+    "uuid": "atk-edge-05-socket-out",
+    "timestamp": 1700000006.4,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "connect",
+      "src_ip": "192.168.1.50",
+      "src_port": 48210,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 8080,
+      "protocol": "TCP",
+      "is_attack": true,
+      "description": "Outbound lateral movement TCP socket initiated to Fog gateway"
+    },
+    "parents": [
+      "atk-edge-04-creds"
+    ],
+    "tamper_hash": "dd13a876cdca507f030965fb2d1dd1265788a678ca9e401d09ab678f09640d9b"
+  },
+  {
+    "uuid": "atk-fog-01-socket-in",
+    "timestamp": 1700000006.4150002,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "accept",
+      "src_ip": "192.168.1.50",
+      "src_port": 48210,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 8080,
+      "protocol": "TCP",
+      "is_attack": true,
+      "description": "Fog gateway accepts rogue session using stolen token"
+    },
+    "parents": [],
+    "tamper_hash": "8dca2f4bb8e8ed984d9da7773937e29d2d3d6525582fd5ebebd80bc8b19eceb4"
+  },
+  {
+    "uuid": "atk2-edge-03-socket-out",
+    "timestamp": 1700000006.7,
+    "tier": "Edge",
+    "host_id": "edge-sensor-02",
+    "event_type": "Socket",
+    "payload": {
+      "action": "connect",
+      "src_ip": "192.168.1.51",
+      "src_port": 49100,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 9090,
+      "protocol": "TCP",
+      "is_attack": true,
+      "description": "Secondary lateral movement socket to Fog gateway port 9090"
+    },
+    "parents": [
+      "atk2-edge-02-shell"
+    ],
+    "tamper_hash": "c5d39c2e3bbf7d531178095359e574c0b51397f10e016571956a1e84cbffdb3e"
+  },
+  {
+    "uuid": "atk2-fog-01-socket-in",
+    "timestamp": 1700000006.72,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "accept",
+      "src_ip": "192.168.1.51",
+      "src_port": 49100,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 9090,
+      "protocol": "TCP",
+      "is_attack": true,
+      "description": "Fog gateway accepts secondary covert connection"
+    },
+    "parents": [],
+    "tamper_hash": "d9005bba1909eb15cad173327ab8405d5539ab5d9a7698f4c86a459b14dae17a"
+  },
+  {
+    "uuid": "benign-edge-read-9",
+    "timestamp": 1700000006.8000004,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "ceb586324c3e35a301057d02ac80db3dc4cc710bc1b7025474452200625a2b2a"
+  },
+  {
+    "uuid": "atk-fog-02-exec",
+    "timestamp": 1700000006.8150003,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "/usr/bin/python3 -c 'import os; os.system(\"scrape_creds\")'",
+      "pid": 3410,
+      "is_attack": true,
+      "description": "Unauthorized Python process executed on Fog gateway"
+    },
+    "parents": [
+      "atk-fog-01-socket-in",
+      "atk3-fog-01-socket-in"
+    ],
+    "tamper_hash": "86c4ce0aa37e33bc4fb7b8743243b72ab210668d262c99aec4c50c627544c47a"
+  },
+  {
+    "uuid": "benign-edge-sock-out-9",
+    "timestamp": 1700000007.0000005,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39009,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-9"
+    ],
+    "tamper_hash": "daaccacee97aac927fbcbd18494b9d3dca797c25dfb02d08109bd37196c96040"
+  },
+  {
+    "uuid": "atk2-fog-02-persist",
+    "timestamp": 1700000007.02,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "File",
+    "payload": {
+      "action": "write",
+      "entity": "/etc/cron.d/stealth_persist",
+      "is_attack": true,
+      "description": "Secondary persistence task established on Fog gateway"
+    },
+    "parents": [
+      "atk2-fog-01-socket-in",
+      "atk-fog-02-exec"
+    ],
+    "tamper_hash": "9503be624d3e7b94738c5ec514c1d75fc49d220d0f66601a60b8abadf722934d"
+  },
+  {
+    "uuid": "atk-fog-03-cloud-creds",
+    "timestamp": 1700000007.1150002,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/var/run/secrets/cloud_service_account.json",
+      "is_attack": true,
+      "description": "Read privileged Cloud service-account token from Fog node"
+    },
+    "parents": [
+      "atk-fog-02-exec"
+    ],
+    "tamper_hash": "f60d0eae6465d520b94213a06492c397c12e2697866b12f2563e30e12a75b66d"
+  },
+  {
+    "uuid": "benign-edge-read-10",
+    "timestamp": 1700000007.5000005,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "dd5f580278eedcde2d800a82cd8f22d49a328aff670c9e6f95ad1c675f505fd4"
+  },
+  {
+    "uuid": "benign-edge-sock-out-10",
+    "timestamp": 1700000007.7000005,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39010,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-10"
+    ],
+    "tamper_hash": "fe85a2f7b78d03faaec56ea8641bd54f3056799c215c3311c64a3c650617d117"
+  },
+  {
+    "uuid": "atk-fog-04-socket-out",
+    "timestamp": 1700000007.7150002,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "connect",
+      "src_ip": "10.0.1.1",
+      "src_port": 52110,
+      "dst_ip": "172.16.0.10",
+      "dst_port": 443,
+      "protocol": "TCP",
+      "is_attack": true,
+      "description": "Outbound pivot connection to centralized Cloud API endpoint"
+    },
+    "parents": [
+      "atk-fog-03-cloud-creds",
+      "atk2-fog-02-persist"
+    ],
+    "tamper_hash": "17facda6d5ea0bdf408ddcbb6c900d684666c4dba666e08d0e38e139641d5df4"
+  },
+  {
+    "uuid": "atk-cloud-01-socket-in",
+    "timestamp": 1700000007.7800002,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "Socket",
+    "payload": {
+      "action": "accept",
+      "src_ip": "10.0.1.1",
+      "src_port": 52110,
+      "dst_ip": "172.16.0.10",
+      "dst_port": 443,
+      "protocol": "TCP",
+      "is_attack": true,
+      "description": "Cloud API ingress receives connection carrying stolen token"
+    },
+    "parents": [],
+    "tamper_hash": "fe6d8d3d49a0665b16137f2e6876a68e1c63904ab513b573e98112e7f56eb3ab"
+  },
+  {
+    "uuid": "benign-edge-read-11",
+    "timestamp": 1700000008.2000005,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "c047b8909c7540fe0c0441ce3cddf16463af0135a52cb5587eb5663d2455092c"
+  },
+  {
+    "uuid": "atk-cloud-02-api-call",
+    "timestamp": 1700000008.2800002,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "auth_login",
+      "entity": "POST /v1/admin/export_customer_data",
+      "token_id": "service-account-fog-cluster",
+      "is_attack": true,
+      "description": "Unauthorized administrative API request invoked"
+    },
+    "parents": [
+      "atk-cloud-01-socket-in"
+    ],
+    "tamper_hash": "81d1c0a23aa145cca3deaf18a008461e8b4092a620f7af1bf39fc1fbad48fd80"
+  },
+  {
+    "uuid": "benign-edge-sock-out-11",
+    "timestamp": 1700000008.4000006,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39011,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-11"
+    ],
+    "tamper_hash": "cc848eb56ccf690da675cf63b57c0243b6447fadd589bb9d2ad48bb776ff4e39"
+  },
+  {
+    "uuid": "benign-fog-agg-0",
+    "timestamp": 1700000008.8000007,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "4e0db522eedbffd4abe2d06ca0b4f03f3390d4afb43087f9520229472d0c38b0"
+  },
+  {
+    "uuid": "atk-cloud-03-db-query",
+    "timestamp": 1700000009.0800002,
+    "tier": "Cloud",
+    "host_id": "cloud-db-cluster",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "SELECT * FROM enterprise_customer_records WHERE sensitive=true",
+      "records_affected": 50000,
+      "is_attack": true,
+      "description": "Mass extraction of confidential database records"
+    },
+    "parents": [
+      "atk-cloud-02-api-call"
+    ],
+    "tamper_hash": "3b5e9c18184eed06b18a139e87917edec8bddc8e0afb548b593caa3e8f11a263"
+  },
+  {
+    "uuid": "benign-fog-agg-1",
+    "timestamp": 1700000009.2000008,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "47a69c590cad026d6ea3b9f2383e5abccf91c0758f056e584c9aee9bef83d6c8"
+  },
+  {
+    "uuid": "benign-fog-agg-2",
+    "timestamp": 1700000009.6000009,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "0e3c597e49f62c8bb07f301886d7490346e7118c6a97bfefed3014908f693ac5"
+  },
+  {
+    "uuid": "atk-cloud-04-file-archive",
+    "timestamp": 1700000009.7800002,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "File",
+    "payload": {
+      "action": "write",
+      "entity": "/tmp/exfiltrated_records_dump.tar.gz",
+      "size_bytes": 104857600,
+      "is_attack": true,
+      "description": "Customer database records packed into compressed archive"
+    },
+    "parents": [
+      "atk-cloud-03-db-query"
+    ],
+    "tamper_hash": "9758eba14b1effc88bd2ea345ffc57a51aa4502dd420ea136d011844b4f20140"
+  },
+  {
+    "uuid": "benign-fog-agg-3",
+    "timestamp": 1700000010.000001,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "4fb5b1917f2865931e14df7210f6ba554dd5aaa76a6932a0a4f8bd75f785b052"
+  },
+  {
+    "uuid": "benign-fog-agg-4",
+    "timestamp": 1700000010.400001,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "5a5b4a4a3b31f4f95d697c586d0dca57f4608fdd31ad1addbb77915c28df9238"
+  },
+  {
+    "uuid": "benign-fog-agg-5",
+    "timestamp": 1700000010.8000011,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "ec3d924a574bdd312624ec3b2f84a58c7ea901f0416f8e1c2fe1c505c40a4206"
+  },
+  {
+    "uuid": "atk-cloud-05-exfil-c2",
+    "timestamp": 1700000010.9800003,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "Socket",
+    "payload": {
+      "action": "exfil_data",
+      "src_ip": "172.16.0.10",
+      "src_port": 59912,
+      "dst_ip": "198.51.100.77",
+      "dst_port": 443,
+      "protocol": "TCP",
+      "bytes_transferred": 104857600,
+      "is_attack": true,
+      "description": "CRITICAL IMPACT: Sensitive data exfiltrated to adversary C2 IP"
+    },
+    "parents": [
+      "atk-cloud-04-file-archive"
+    ],
+    "tamper_hash": "e009062f341f0fe29818ec83e4890d960d487d86775fc604055f4918c61cd320"
+  },
+  {
+    "uuid": "benign-fog-agg-6",
+    "timestamp": 1700000011.2000012,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "03220219ce106c3e31e19042b032b7fe21f21b37dd6b3e76d7b504398bed8fed"
+  },
+  {
+    "uuid": "benign-fog-agg-7",
+    "timestamp": 1700000011.6000013,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "1114e2c88458f6919e6a360a285459b58fe872e830eaf0a2cdf7db52ecb59aec"
+  },
+  {
+    "uuid": "benign-fog-agg-8",
+    "timestamp": 1700000012.0000014,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "3561a474d8cc2003dd9f11cf1935912d4658df4be9f4314d5922f9973a7a5313"
+  },
+  {
+    "uuid": "benign-fog-agg-9",
+    "timestamp": 1700000012.4000015,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "9e20fdade90c81de1e9934a773510782cc24517dce9bfc32d777f7cdc48bd43f"
+  },
+  {
+    "uuid": "benign-fog-agg-10",
+    "timestamp": 1700000012.8000016,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "52ee3497788d5720448c0a2102b7d426e4566c2dab10d404481caa70de18d491"
+  },
+  {
+    "uuid": "benign-fog-agg-11",
+    "timestamp": 1700000013.2000017,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "afd5bb5ad59807a68d270a68cc6c5d0a25711eae2a1c150d5c355d2d7771e24b"
+  },
+  {
+    "uuid": "benign-cloud-audit-0",
+    "timestamp": 1700000013.8000016,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "9a3c7f84ab60fedac4cf21a174660ce5eb4000019f094a188ae9ded5561baedf"
+  },
+  {
+    "uuid": "benign-cloud-audit-1",
+    "timestamp": 1700000014.4000015,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "d1f5a4121c93499a65a3e9bc29062c3cfa7adbcdd542738e3b384d5047cf2bd4"
+  },
+  {
+    "uuid": "benign-cloud-audit-2",
+    "timestamp": 1700000015.0000014,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "9c956cb63a38ad59530804f9fe4b6fc1d3bef047a56650e153ac20fe5bfdcc5f"
+  },
+  {
+    "uuid": "benign-cloud-audit-3",
+    "timestamp": 1700000015.6000013,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "0c1fdd51a3b1f0b0094029e22f4238e52d1d4a028198b0c1bbad3f85e03af6d5"
+  },
+  {
+    "uuid": "benign-cloud-audit-4",
+    "timestamp": 1700000016.2000012,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "f661a0690e1d3dbd2c96231e69e53b30ff905f5296dc1d98055afbaec1561ba2"
+  },
+  {
+    "uuid": "benign-cloud-audit-5",
+    "timestamp": 1700000016.8000011,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "e771da2cf5fcbe23875adae04b01128df6f690f4e31cc35e3d590c25255f3477"
+  },
+  {
+    "uuid": "benign-cloud-audit-6",
+    "timestamp": 1700000017.400001,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "31ee4fa2385982a9fb4b4c63491514e55676b514994fc5034a3d6191eae8b0d6"
+  },
+  {
+    "uuid": "benign-cloud-audit-7",
+    "timestamp": 1700000018.000001,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "1c76760ff40dd95fd9575dac554c4591abdbe2bf2eea32bab173b079672b7c5c"
+  },
+  {
+    "uuid": "benign-cloud-audit-8",
+    "timestamp": 1700000018.6000009,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "614ba0cbf639601c5e232f6d3f88bba7027b21301d719907d6fb801a8d96de77"
+  },
+  {
+    "uuid": "benign-cloud-audit-9",
+    "timestamp": 1700000019.2000008,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "e41e8c8c1396cc038bd1562fbbef947077ec48de79413f571243b67016296f26"
+  },
+  {
+    "uuid": "benign-cloud-audit-10",
+    "timestamp": 1700000019.8000007,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "e268a07d9ce90071a4725d5e964a444b0279fbc73a2f29b46110ad2c41b4c1b3"
+  },
+  {
+    "uuid": "repeated-start",
+    "timestamp": 1700000020.0,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [],
+    "tamper_hash": "fd4aab9857552138a7ae9898ee0ada0068f802e09bb070098910b21f8971372f"
+  },
+  {
+    "uuid": "repeated-read-00",
+    "timestamp": 1700000020.01,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-start"
+    ],
+    "tamper_hash": "6dee91b1b5301b50488f3e775f33733a0d03bd2f69eaaa0377508c6760d2cf31"
+  },
+  {
+    "uuid": "repeated-read-01",
+    "timestamp": 1700000020.02,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-00"
+    ],
+    "tamper_hash": "7170ad2fa205a9e387cdabf214f593e0f912e6c2bce62945c0ae7947ee88c469"
+  },
+  {
+    "uuid": "repeated-read-02",
+    "timestamp": 1700000020.03,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-01"
+    ],
+    "tamper_hash": "3d9a27dae2eb31e5bc9f55350e2942544d1a7909e79f25ae0768752b58dd12d8"
+  },
+  {
+    "uuid": "repeated-read-03",
+    "timestamp": 1700000020.04,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-02"
+    ],
+    "tamper_hash": "228b3a5ecbaff905e01e2151b9b82b61eae96816a9fa725c65347d94a97abd35"
+  },
+  {
+    "uuid": "repeated-read-04",
+    "timestamp": 1700000020.05,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-03"
+    ],
+    "tamper_hash": "61874cbf5a668f14e01764a8f1049293939f9d424d66c7d3e4988f42a2341303"
+  },
+  {
+    "uuid": "repeated-read-05",
+    "timestamp": 1700000020.06,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-04"
+    ],
+    "tamper_hash": "8d3518dda8aaeadc13d4db605797444f8d384ea99d9f6ce9c0166432fdc61119"
+  },
+  {
+    "uuid": "repeated-read-06",
+    "timestamp": 1700000020.07,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-05"
+    ],
+    "tamper_hash": "591abe30c09c9fb16dcc1b4874b8c49afeac6613b01f199bb0c347f333b1055d"
+  },
+  {
+    "uuid": "repeated-read-07",
+    "timestamp": 1700000020.08,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-06"
+    ],
+    "tamper_hash": "849402b59c9cc75328ea5798353323f3acd1b4393a7a8e679ece38e6add44d68"
+  },
+  {
+    "uuid": "repeated-read-08",
+    "timestamp": 1700000020.09,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-07"
+    ],
+    "tamper_hash": "e8aa0b7e45bae2f401a57c65f8231c9f3b988cb6fd7866245f89f5885e494323"
+  },
+  {
+    "uuid": "repeated-read-09",
+    "timestamp": 1700000020.1,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-08"
+    ],
+    "tamper_hash": "bfc864b8bd12c48ddb923d29d4f7bf390bb0001f8613808249536e5c38cfe128"
+  },
+  {
+    "uuid": "repeated-read-10",
+    "timestamp": 1700000020.11,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-09"
+    ],
+    "tamper_hash": "67641fc7afd887546295d3bb8570ed1a509996fa2faa0129d0809596a93a8ef5"
+  },
+  {
+    "uuid": "repeated-read-11",
+    "timestamp": 1700000020.12,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-10"
+    ],
+    "tamper_hash": "be28a67529fab469378df39d4004fd6cfecd3a6984f4d9555908cbb9a18695fc"
+  },
+  {
+    "uuid": "repeated-read-12",
+    "timestamp": 1700000020.1299999,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-11"
+    ],
+    "tamper_hash": "56ae455d65430195ff8408fb49e415d7a828561e1df024c130550f5610fa78f2"
+  },
+  {
+    "uuid": "repeated-read-13",
+    "timestamp": 1700000020.14,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-12"
+    ],
+    "tamper_hash": "9709b0314966ac3887a73a74aac8ec679fb8b581533454e4058750aec5398f9b"
+  },
+  {
+    "uuid": "repeated-read-14",
+    "timestamp": 1700000020.15,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-13"
+    ],
+    "tamper_hash": "11ef4de48596fd5999ae189149eb52cd641473569ab8ad9bdf23c631ecc8ea8f"
+  },
+  {
+    "uuid": "repeated-read-15",
+    "timestamp": 1700000020.16,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-14"
+    ],
+    "tamper_hash": "d16c4a60c8881cd877d5782f7eb9d83a6188c00082edc3d19d1372642637a178"
+  },
+  {
+    "uuid": "repeated-read-16",
+    "timestamp": 1700000020.17,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-15"
+    ],
+    "tamper_hash": "eebd9be9819c0598093ff815301137ec41a1735addda301554638b111972056b"
+  },
+  {
+    "uuid": "repeated-read-17",
+    "timestamp": 1700000020.18,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-16"
+    ],
+    "tamper_hash": "02f5ed72eed148384ad1bf4eba5c124564248cbd02f1f153d30ed4c172ba9e2b"
+  },
+  {
+    "uuid": "repeated-read-18",
+    "timestamp": 1700000020.19,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-17"
+    ],
+    "tamper_hash": "ec33fae76db81c51a1d6952a2b94fe0152d3ae58e200f81a313a549e08d8c47f"
+  },
+  {
+    "uuid": "repeated-read-19",
+    "timestamp": 1700000020.2,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "pid": 1042,
+      "process": "sensor_daemon",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-18"
+    ],
+    "tamper_hash": "b3563ec591ef69dd5e11583fd9f4d899da5f45008c519c7859979fe41c1e9596"
+  },
+  {
+    "uuid": "benign-cloud-audit-11",
+    "timestamp": 1700000020.4000006,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "460dfd1ccb1bb9fcfa50c9cb4bea6c3f1266255b51aa0ad3ae4622da5c4b95cb"
+  },
+  {
+    "uuid": "repeated-end",
+    "timestamp": 1700000020.5,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "flush_metrics",
+      "is_attack": false
+    },
+    "parents": [
+      "repeated-read-19"
+    ],
+    "tamper_hash": "3720f2703fe06d6a867cbaace0e9355a7726d68f5eafce8b3f6abf667069d6a1"
+  }
+]

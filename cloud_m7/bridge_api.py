@@ -9,6 +9,9 @@ import json
 import os
 import sys
 import time
+import hashlib
+import re
+import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -18,6 +21,9 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 from cloud_m7.adapters.factory import DatasetNormalizerFactory
+from cloud_m7.adapters.canonical import DatasetValidationError
+from cloud_m7.fusion.reduction import fold_repeated_reads
+from cloud_m7.placement.demo import placement_comparison
 from cloud_m7.fusion.active_remediation import ActiveChokePointRemediator
 from cloud_m7.fusion.attack_path import AttackPathReconstructor
 from cloud_m7.fusion.causal_bridge import CausalBridgeImputer
@@ -32,39 +38,41 @@ from cloud_m7.simulator.attack_scenario import MultiTierAttackSimulator
 from cloud_m7.storage.parquet_engine import ProvenanceStorageEngine
 
 
-def load_dataset_events(dataset_id: str) -> tuple[List[ProvenanceEvent], str]:
-    """Loads events based on dataset identifier or raw file path."""
-    factory = DatasetNormalizerFactory()
+DEMO_DIR = ROOT_DIR / "data" / "demo"
+BUNDLED = {"synthetic": "attack", "attack": "attack", "normal": "normal", "repeated": "repeated"}
 
-    if dataset_id == "synthetic":
-        sim = MultiTierAttackSimulator()
-        events = sim.generate_full_simulation_dataset(benign_count=36, include_multi_vector=True)
-        return events, "Synthetic_MultiTier_GroundTruth"
-    elif dataset_id == "darpa_optc":
-        path = ROOT_DIR / "data" / "raw" / "sample_darpa_optc.jsonl"
-        return factory.normalize(str(path), adapter_name="DARPA_OpTC")
-    elif dataset_id == "darpa_tc":
-        path = ROOT_DIR / "data" / "raw" / "sample_darpa_tc.json"
-        return factory.normalize(str(path), adapter_name="DARPA_TC")
-    elif dataset_id == "ton_iot":
-        path = ROOT_DIR / "data" / "raw" / "sample_ton_iot.csv"
-        return factory.normalize(str(path), adapter_name="TON_IoT")
-    elif dataset_id == "iot23":
-        path = ROOT_DIR / "data" / "raw" / "sample_iot23.csv"
-        return factory.normalize(str(path), adapter_name="IoT_23")
-    elif os.path.exists(dataset_id):
-        return factory.normalize(dataset_id)
-    else:
-        # Default fallback
-        sim = MultiTierAttackSimulator()
-        events = sim.generate_full_simulation_dataset()
-        return events, "Synthetic_Default"
+
+def load_dataset_events(dataset_id: str) -> tuple[List[ProvenanceEvent], str]:
+    factory = DatasetNormalizerFactory()
+    if dataset_id in BUNDLED:
+        return factory.normalize(str(DEMO_DIR / f"{BUNDLED[dataset_id]}.json"))
+    if dataset_id in ("darpa_optc", "darpa_tc", "ton_iot", "iot23"):
+        raise DatasetValidationError(["Public benchmark files are not bundled. Upload a sourced file; Review 2 uses controlled fixtures."])
+    if re.fullmatch(r"ds-[0-9a-f]{64}", dataset_id):
+        path = ROOT_DIR / "data" / "processed" / "datasets" / f"{dataset_id}.json"
+        return factory.normalize(str(path))
+    if not os.path.isfile(dataset_id):
+        raise DatasetValidationError([f"Dataset not found: {dataset_id}"])
+    return factory.normalize(dataset_id)
 
 
 def analyze_dataset(dataset_id: str) -> Dict[str, Any]:
     """Executes full multi-tier analysis across all 5 novelties and storage layer."""
     t0 = time.time()
-    events, detected_fmt = load_dataset_events(dataset_id)
+    requested_dataset = dataset_id
+    events, detected_fmt = load_dataset_events(requested_dataset)
+    if len(events) > 2000:
+        raise DatasetValidationError(["This laptop demo supports at most 2000 events per dataset"])
+    events = sorted(events, key=lambda e: (e.timestamp, e.uuid))
+    canonical = json.dumps([e.to_dict() for e in events], sort_keys=True, separators=(",", ":"))
+    dataset_id = "ds-" + hashlib.sha256(canonical.encode()).hexdigest()
+    provenance = {
+        "kind": "controlled_synthetic" if requested_dataset in BUNDLED else "user_supplied",
+        "source": f"data/demo/{BUNDLED[requested_dataset]}.json" if requested_dataset in BUNDLED else os.path.basename(requested_dataset),
+        "description": "Controlled synthetic ground truth; not a real attack capture" if requested_dataset in BUNDLED else "User-supplied file; source claims have not been independently verified",
+        "labels": "is_attack values are supplied labels; this demonstration reconstructs evidence, not unseen-attack detection",
+        "sha256": dataset_id[3:],
+    }
 
     # 1. Graph Synthesis
     engine = ProvenanceGraphEngine(time_window_seconds=15.0)
@@ -91,6 +99,9 @@ def analyze_dataset(dataset_id: str) -> Dict[str, Any]:
                 "entity": s.entity,
                 "description": s.description,
             })
+
+    reduction = fold_repeated_reads(global_dag,
+        protected_nodes=[recon_res.source_root_uuid, recon_res.target_impact_uuid] if recon_res else [])
 
     # 3. Novelty 1: Iterative Multi-Root Discovery
     iter_engine = IterativeAttackDiscoveryEngine(
@@ -204,11 +215,18 @@ def analyze_dataset(dataset_id: str) -> Dict[str, Any]:
 
     # 8. Parquet + DuckDB Storage Layer Benchmark
     storage = ProvenanceStorageEngine()
-    data_dir = ROOT_DIR / "data" / "processed"
-    os.makedirs(str(data_dir), exist_ok=True)
-    parquet_path = str(data_dir / "provenance_events.parquet")
-    json_path = str(data_dir / "provenance_events.json")
-    bench = storage.benchmark_compression(events, parquet_path, json_path)
+    data_dir = ROOT_DIR / "data" / "processed" / "datasets"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    parquet_path = str(data_dir / f"{dataset_id}.parquet")
+    json_path = str(data_dir / f"{dataset_id}.json")
+    # Publish completed files atomically; other dataset selections never overwrite them.
+    with tempfile.TemporaryDirectory(dir=data_dir) as temporary:
+        temp_parquet = str(Path(temporary) / "events.parquet")
+        temp_json = str(Path(temporary) / "events.json")
+        bench = storage.benchmark_compression(events, temp_parquet, temp_json)
+        os.replace(temp_parquet, parquet_path)
+        os.replace(temp_json, json_path)
+    storage.conn.close()
 
     # 9. Graph representation for Frontend Vis-Network (Canvas)
     vis_nodes = []
@@ -273,11 +291,33 @@ def analyze_dataset(dataset_id: str) -> Dict[str, Any]:
             "tamper_hash": e.tamper_hash[:16] + "..." if e.tamper_hash else "None",
         })
 
+    original_vis = {node["id"]: node for node in vis_nodes}
+    reduced_nodes = []
+    for node, attrs in reduction.graph.nodes(data=True):
+        members = reduction.membership[node]
+        item = dict(original_vis[members[0]])
+        item.update(id=node, member_uuids=members, folded_count=len(members))
+        if len(members) > 1:
+            item["label"] = f"{len(members)} identical reads\n({attrs.get('host_id')})"
+            item["size"] = 28
+        reduced_nodes.append(item)
+    reduced_edges = [{"from": u, "to": v, "arrows": "to", "title": d.get("relation", "causal_dependency")}
+        for u, v, d in reduction.graph.edges(data=True)]
+
     total_time_ms = round((time.time() - t0) * 1000, 2)
 
     return {
         "status": "success",
-        "dataset_name": dataset_id,
+        "dataset_name": requested_dataset,
+        "dataset_id": dataset_id,
+        "dataset_provenance": provenance,
+        "events": [e.to_dict() for e in events],
+        "reduction": reduction.metrics,
+        "reduced_graph": {"nodes": reduced_nodes, "edges": reduced_edges},
+        "folded_membership": reduction.membership,
+        "folded_evidence": {node: [engine.events_by_id[uid].to_dict() for uid in members]
+            for node, members in reduction.membership.items() if len(members) > 1},
+        "placement": placement_comparison(),
         "detected_format": detected_fmt,
         "processing_time_ms": total_time_ms,
         "summary": {
@@ -336,26 +376,31 @@ def analyze_dataset(dataset_id: str) -> Dict[str, Any]:
     }
 
 
-def execute_sql(sql_query: str) -> Dict[str, Any]:
-    """Runs a live SQL query on the Parquet file via DuckDB."""
+def execute_sql(sql_query: str, dataset_id: str = "") -> Dict[str, Any]:
+    """Query exactly the dataset selected in the UI; never a global last-written file."""
+    if not re.fullmatch(r"ds-[0-9a-f]{64}", dataset_id):
+        return {"status": "error", "message": "A valid selected dataset_id is required"}
+    parquet_path = ROOT_DIR / "data" / "processed" / "datasets" / f"{dataset_id}.parquet"
+    if not parquet_path.is_file():
+        return {"status": "error", "message": "Dataset not initialized. Load it before querying."}
     storage = ProvenanceStorageEngine()
-    parquet_path = str(ROOT_DIR / "data" / "processed" / "provenance_events.parquet")
-    if not os.path.exists(parquet_path):
-        return {"status": "error", "message": "Parquet database not initialized yet. Load a dataset first."}
-
-    t0 = time.time()
+    t0 = time.perf_counter()
     try:
-        df = storage.query_sql(sql_query, parquet_path=parquet_path)
-        latency_ms = round((time.time() - t0) * 1000, 2)
-        return {
-            "status": "success",
-            "columns": list(df.columns),
-            "rows": df.to_dict(orient="records"),
-            "row_count": len(df),
-            "latency_ms": latency_ms,
-        }
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
+        # The teacher console is read-only and exposes the selected dataset as a view.
+        storage.conn.execute("SET enable_external_access=false")
+        import pyarrow.parquet as pq
+        storage.conn.register("provenance", pq.read_table(parquet_path))
+        statements = storage.conn.extract_statements(sql_query)
+        if len(statements) != 1 or str(statements[0].type).split(".")[-1] != "SELECT":
+            raise ValueError("Only one read-only SELECT statement is allowed")
+        df = storage.conn.execute(sql_query).fetchdf()
+        return {"status": "success", "dataset_id": dataset_id, "columns": list(df.columns),
+            "rows": json.loads(df.to_json(orient="records")), "row_count": len(df),
+            "latency_ms": round((time.perf_counter() - t0) * 1000, 3)}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+    finally:
+        storage.conn.close()
 
 
 def generate_hardware_telemetry(count: int = 5) -> Dict[str, Any]:
@@ -379,19 +424,21 @@ def main():
     parser = argparse.ArgumentParser(description="CLOUD-M7 Python Bridge API for Node.js Dashboard")
     parser.add_argument("--action", choices=["analyze", "sql", "hardware"], default="analyze")
     parser.add_argument("--dataset", default="synthetic")
+    parser.add_argument("--dataset-id", default="")
     parser.add_argument("--query", default="SELECT tier, event_type, COUNT(*) as count FROM provenance GROUP BY tier, event_type")
     parser.add_argument("--count", type=int, default=5)
     args = parser.parse_args()
 
-    if args.action == "analyze":
-        res = analyze_dataset(args.dataset)
-        print(json.dumps(res))
-    elif args.action == "sql":
-        res = execute_sql(args.query)
-        print(json.dumps(res))
-    elif args.action == "hardware":
-        res = generate_hardware_telemetry(args.count)
-        print(json.dumps(res))
+    try:
+        if args.action == "analyze":
+            res = analyze_dataset(args.dataset)
+        elif args.action == "sql":
+            res = execute_sql(args.query, args.dataset_id)
+        else:
+            res = generate_hardware_telemetry(args.count)
+    except (ValueError, OSError) as exc:
+        res = {"status": "error", "message": str(exc), "errors": getattr(exc, "errors", [str(exc)])}
+    print(json.dumps(res, allow_nan=False))
 
 
 if __name__ == "__main__":

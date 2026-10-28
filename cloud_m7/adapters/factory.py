@@ -11,6 +11,7 @@ import json
 import os
 
 from cloud_m7.adapters.base import BaseDatasetAdapter
+from cloud_m7.adapters.canonical import parse_canonical, DatasetValidationError
 from cloud_m7.adapters.optc_adapter import DarpaOpTCAdapter
 from cloud_m7.adapters.tc_adapter import DarpaTCAdapter
 from cloud_m7.adapters.ton_iot_adapter import TonIotAdapter
@@ -57,21 +58,23 @@ class DatasetNormalizerFactory:
         Normalizes dataset content or file into ProvenanceEvent list.
         Returns: (events_list, detected_adapter_name)
         """
-        # Read content if it's a file path
-        if os.path.exists(content_or_path) and os.path.isfile(content_or_path):
-            with open(content_or_path, "r", encoding="utf-8", errors="ignore") as f:
+        # Content and paths are distinct; missing paths must not become fake records.
+        looks_like_path = len(content_or_path) < 260 and "\n" not in content_or_path and not content_or_path.lstrip().startswith(("[", "{"))
+        if looks_like_path and os.path.isfile(content_or_path):
+            with open(content_or_path, "r", encoding="utf-8-sig") as f:
                 content = f.read()
+        elif looks_like_path and content_or_path.lower().endswith((".json", ".jsonl", ".csv", ".tsv", ".log")):
+            raise DatasetValidationError([f"Dataset file not found: {content_or_path}"])
         else:
             content = content_or_path
-
-        # Check if it's already CLOUD-M7 native JSON
-        try:
-            parsed = json.loads(content)
-            if isinstance(parsed, list) and len(parsed) > 0 and "tamper_hash" in parsed[0]:
-                events = [ProvenanceEvent.from_dict(d) for d in parsed[:max_events]]
-                return events, "CLOUD-M7_Native"
-        except Exception:
-            pass
+        if not content.strip():
+            raise DatasetValidationError(["Dataset is empty"])
+        # Explicit external formats may contain JSONL rather than canonical JSON.
+        if adapter_name is None or adapter_name == "CLOUD-M7_Native":
+            is_jsonl = content.lstrip().startswith("{") and "\n" in content.strip() and "}\n{" in content
+            native = None if is_jsonl else parse_canonical(content)
+            if native is not None:
+                return native[:max_events], "CLOUD-M7_Native"
 
         # Select adapter
         selected_adapter = None
@@ -80,13 +83,14 @@ class DatasetNormalizerFactory:
                 if ad.dataset_name.lower() == adapter_name.lower():
                     selected_adapter = ad
                     break
+            if selected_adapter is None:
+                raise DatasetValidationError([f"Unsupported adapter: {adapter_name}"])
 
         if selected_adapter is None:
             selected_adapter = self.detect_adapter(content)
 
         if selected_adapter is None:
-            # Default fallback to OpTC/Generic
-            selected_adapter = self.adapters[0]
+            raise DatasetValidationError(["Unsupported dataset format; use canonical JSON/CSV or a recognised external format"])
 
         default_tier = tier or (
             TierType.CLOUD if "optc" in selected_adapter.dataset_name.lower() else
@@ -94,4 +98,6 @@ class DatasetNormalizerFactory:
         )
 
         events = selected_adapter.parse_records(content, max_events=max_events, default_tier=default_tier)
+        if not events:
+            raise DatasetValidationError(["No valid events were parsed from this dataset"])
         return events, selected_adapter.dataset_name

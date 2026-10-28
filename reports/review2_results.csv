@@ -1,0 +1,4 @@
+dataset,dataset_id,events,attack_labels,sources,primary_path_events,original_nodes,reduced_nodes,graph_reduction_pct,reachability_preserved,json_bytes,parquet_bytes,analysis_median_ms,analysis_min_ms,analysis_max_ms,reduction_median_ms
+normal,ds-f59074d31a798a0dab3a76bdb5829ec235883dfb1eec9438bf4d7d59cf83975a,16,0,0,0,16,16,0.0,True,6766,12603,62.64,61.94,138.02,0.419
+attack,ds-c9eabd3fce3ce6d42ed21f4dad0f721dc7ead4854fc9182a7d1a891bcaf1bf8d,70,22,3,14,70,70,0.0,True,30336,20386,103.34,79.38,117.69,2.295
+repeated,ds-8d6dfd7ff83def90c866ce0309e28ead7808175ebc138073eae7c417cab240e3,92,22,3,14,92,73,20.65,True,38635,22458,99.86,84.34,118.8,2.957

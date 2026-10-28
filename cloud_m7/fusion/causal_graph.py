@@ -43,9 +43,18 @@ class ProvenanceGraphEngine:
         """
         Adds a standardized provenance event to its designated tier subgraph.
         """
+        if event.uuid in self.events_by_id:
+            raise ValueError(f"Duplicate event UUID: {event.uuid}")
+        self.global_graph = nx.DiGraph()
         self.events_by_id[event.uuid] = event
         tier_graph = self.subgraphs[event.tier]
 
+        # Derive a readable endpoint description without changing hashed raw payloads.
+        entity = event.payload.get("entity", "unknown")
+        if entity == "unknown" and event.is_network_event:
+            flow = event.network_tuple
+            if flow:
+                entity = f"{flow[0]}:{flow[1]} -> {flow[2]}:{flow[3]} ({flow[4]})"
         # Add node with metadata attributes
         tier_graph.add_node(
             event.uuid,
@@ -57,13 +66,8 @@ class ProvenanceGraphEngine:
             payload=event.payload,
             is_attack=event.payload.get("is_attack", False),
             action=event.payload.get("action", "unknown"),
-            entity=event.payload.get("entity", "unknown"),
+            entity=entity,
         )
-
-        # Intra-tier causal parent edges: Parent -> Child (flow of causality)
-        for parent_uuid in event.parents:
-            if tier_graph.has_node(parent_uuid):
-                tier_graph.add_edge(parent_uuid, event.uuid, relation="causal_dependency")
 
     def add_events(self, events: List[ProvenanceEvent]) -> None:
         """Batch ingestion of provenance events."""
@@ -80,7 +84,7 @@ class ProvenanceGraphEngine:
 
         # Find all socket events across all tiers
         socket_events: List[ProvenanceEvent] = [
-            e for e in self.events_by_id.values() if e.is_network_event
+            e for e in sorted(self.events_by_id.values(), key=lambda e: (e.timestamp, e.uuid)) if e.is_network_event
         ]
 
         # Partition into outbound (send / connect) and inbound (receive / accept)
@@ -111,10 +115,11 @@ class ProvenanceGraphEngine:
 
                     # Check IP/port alignment and differing tiers
                     ip_match = (src_ip == in_src_ip and dst_ip == in_dst_ip)
-                    port_match = (dst_port == in_dst_port)
+                    port_match = (src_port == in_src_port and dst_port == in_dst_port)
+                    protocol_match = (str(proto).upper() == str(in_proto).upper())
                     different_tiers = (out_e.tier != in_e.tier)
 
-                    if ip_match and port_match and different_tiers:
+                    if ip_match and port_match and protocol_match and different_tiers and src_ip and dst_ip and src_port and dst_port:
                         network_edges.append((out_e.uuid, in_e.uuid))
 
         return network_edges
@@ -126,9 +131,25 @@ class ProvenanceGraphEngine:
         """
         self.global_graph = nx.DiGraph()
 
-        # 1. Compose all intra-tier subgraphs
-        for tier in [TierType.EDGE, TierType.FOG, TierType.CLOUD]:
-            self.global_graph = nx.compose(self.global_graph, self.subgraphs[tier])
+        # Register every node first, then resolve dependencies independent of arrival order.
+        for event in sorted(self.events_by_id.values(), key=lambda e: (e.timestamp, e.uuid)):
+            attrs = dict(self.subgraphs[event.tier].nodes[event.uuid])
+            for key in ("src_ip", "src_port", "dst_ip", "dst_port", "protocol", "pid", "process"):
+                if key in event.payload:
+                    attrs[key] = event.payload[key]
+            self.global_graph.add_node(event.uuid, **attrs)
+        errors = []
+        for event in sorted(self.events_by_id.values(), key=lambda e: (e.timestamp, e.uuid)):
+            for parent_id in sorted(event.parents):
+                parent = self.events_by_id.get(parent_id)
+                if parent is None:
+                    errors.append(f"Event {event.uuid}: missing parent {parent_id}")
+                elif parent_id == event.uuid or parent.timestamp > event.timestamp:
+                    errors.append(f"Event {event.uuid}: invalid causal dependency on {parent_id}")
+                else:
+                    self.global_graph.add_edge(parent_id, event.uuid, relation="causal_dependency")
+        if errors:
+            raise ValueError("; ".join(errors))
 
         # 2. Add cross-tier network edges E_network
         cross_tier_edges = self.correlate_cross_tier_network()
@@ -142,6 +163,13 @@ class ProvenanceGraphEngine:
                 ),
             )
 
+        if not nx.is_directed_acyclic_graph(self.global_graph):
+            raise ValueError("Causal dependencies contain a cycle")
+        # Keep tier views consistent with the resolved graph.
+        for tier in self.subgraphs:
+            self.subgraphs[tier] = self.global_graph.subgraph(
+                [e.uuid for e in self.events_by_id.values() if e.tier == tier]
+            ).copy()
         return self.global_graph
 
     def get_summary_statistics(self) -> Dict[str, Any]:

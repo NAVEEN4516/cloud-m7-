@@ -101,6 +101,9 @@ class AttackPathReconstructor:
                 candidates, key=lambda n: self.graph.nodes[n].get("timestamp", 0)
             )
 
+        if target_uuid not in self.graph or (root_uuid is not None and root_uuid not in self.graph):
+            return None
+
         # Backward trace from target
         causal_ancestors = self.backward_trace(target_uuid)
 
@@ -123,11 +126,7 @@ class AttackPathReconstructor:
         try:
             path_nodes = nx.shortest_path(self.graph, source=root_uuid, target=target_uuid)
         except (nx.NetworkXNoPath, nx.NodeNotFound):
-            # Fallback to connected components or topological sort within ancestors
-            path_nodes = sorted(
-                list(causal_ancestors),
-                key=lambda n: self.graph.nodes[n].get("timestamp", 0),
-            )
+            return None
 
         steps: List[ReconstructedStep] = []
         traversed_tiers: List[str] = []

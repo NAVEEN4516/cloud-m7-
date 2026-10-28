@@ -4,11 +4,15 @@
   "description": "High-Performance Node.js Web Dashboard for CLOUD-M7 Forensic Provenance Framework",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "multer": "^1.4.5-lts.1"
+    "express": "4.21.2",
+    "multer": "2.0.2",
+    "vis-network": "9.1.9"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
   }
 }

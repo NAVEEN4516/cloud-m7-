@@ -1,0 +1,107 @@
+{
+  "method": "Sequential local runs; no warmup excluded; Python analysis only, excludes process launch and HTTP/browser overhead",
+  "runs_per_dataset": 5,
+  "platform": "Windows",
+  "python": "3.12.10",
+  "libraries": {
+    "networkx": "3.7",
+    "pandas": "2.3.3",
+    "pyarrow": "26.0.0",
+    "duckdb": "2.0.0"
+  },
+  "datasets": [
+    {
+      "dataset": "normal",
+      "dataset_id": "ds-f59074d31a798a0dab3a76bdb5829ec235883dfb1eec9438bf4d7d59cf83975a",
+      "events": 16,
+      "attack_labels": 0,
+      "sources": 0,
+      "primary_path_events": 0,
+      "original_nodes": 16,
+      "reduced_nodes": 16,
+      "graph_reduction_pct": 0.0,
+      "reachability_preserved": true,
+      "json_bytes": 6766,
+      "parquet_bytes": 12603,
+      "analysis_median_ms": 62.64,
+      "analysis_min_ms": 61.94,
+      "analysis_max_ms": 138.02,
+      "reduction_median_ms": 0.419
+    },
+    {
+      "dataset": "attack",
+      "dataset_id": "ds-c9eabd3fce3ce6d42ed21f4dad0f721dc7ead4854fc9182a7d1a891bcaf1bf8d",
+      "events": 70,
+      "attack_labels": 22,
+      "sources": 3,
+      "primary_path_events": 14,
+      "original_nodes": 70,
+      "reduced_nodes": 70,
+      "graph_reduction_pct": 0.0,
+      "reachability_preserved": true,
+      "json_bytes": 30336,
+      "parquet_bytes": 20386,
+      "analysis_median_ms": 103.34,
+      "analysis_min_ms": 79.38,
+      "analysis_max_ms": 117.69,
+      "reduction_median_ms": 2.295
+    },
+    {
+      "dataset": "repeated",
+      "dataset_id": "ds-8d6dfd7ff83def90c866ce0309e28ead7808175ebc138073eae7c417cab240e3",
+      "events": 92,
+      "attack_labels": 22,
+      "sources": 3,
+      "primary_path_events": 14,
+      "original_nodes": 92,
+      "reduced_nodes": 73,
+      "graph_reduction_pct": 20.65,
+      "reachability_preserved": true,
+      "json_bytes": 38635,
+      "parquet_bytes": 22458,
+      "analysis_median_ms": 99.86,
+      "analysis_min_ms": 84.34,
+      "analysis_max_ms": 118.8,
+      "reduction_median_ms": 2.957
+    }
+  ],
+  "placement_estimates": {
+    "measurement_kind": "Cost-model estimates; not measured network traffic or device resource use",
+    "assumptions": {
+      "edge_cpu_limit_mcore": 800,
+      "edge_memory_limit_mb": 512,
+      "input_events_per_second": 500,
+      "bytes_per_event": 512
+    },
+    "assignment": {
+      "EventCapture": "Edge",
+      "PrivacyFilter": "Edge",
+      "GraphReduction": "Edge",
+      "CrossTierFusion": "Fog",
+      "CausalAnalytics": "Cloud",
+      "LongTermStorage": "Cloud"
+    },
+    "adaptive": {
+      "latency_ms": 20.0,
+      "bandwidth_kbps": 50.0,
+      "privacy_risk_score": 5.0,
+      "monetary_cost_usd_per_day": 12.5,
+      "edge_cpu_used_mcore": 620.0,
+      "edge_mem_used_mb": 292.0,
+      "total_cost_j": 13.5,
+      "is_feasible": true,
+      "violation_reason": null
+    },
+    "centralized": {
+      "latency_ms": 160.0,
+      "bandwidth_kbps": 500.0,
+      "privacy_risk_score": 120.0,
+      "monetary_cost_usd_per_day": 12.5,
+      "edge_cpu_used_mcore": 150.0,
+      "edge_mem_used_mb": 64.0,
+      "total_cost_j": 68.0,
+      "is_feasible": true,
+      "violation_reason": null
+    }
+  }
+}

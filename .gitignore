@@ -59,3 +59,17 @@ web_dashboard/uploads/*
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Local duplicate database exports and unavailable OneDrive backup placeholders
+/database/
+*.db
+*.db-wal
+*.db-shm
+*.onedrive-placeholder
+
+# Local configuration and generated browser-test reports
+.env
+.env.*
+!.env.example
+web_dashboard/test-results/
+web_dashboard/playwright-report/

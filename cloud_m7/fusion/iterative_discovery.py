@@ -208,13 +208,6 @@ class IterativeAttackDiscoveryEngine:
                         candidate_roots.append(n)
 
             if not candidate_roots:
-                # If no unvisited root with 0 in-degree, look for unvisited attack nodes
-                candidate_roots = [
-                    n for n in unvisited_ancestors
-                    if self.graph.nodes[n].get("is_attack") and n not in discovered_nodes_cumulative
-                ]
-
-            if not candidate_roots:
                 converged = True
                 convergence_reason = f"No further unvisited causal entry vectors remaining (Iteration {k})"
                 iteration_history.append(

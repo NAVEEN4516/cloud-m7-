@@ -1,120 +1,61 @@
-# CLOUD-M7 Architectural Specification
+# CLOUD-M7: implemented Review 2 architecture
 
-## 1. System Overview
+The prepared demo runs on one laptop. Edge, Fog and Cloud are event attributes describing a controlled scenario, not separate deployed computers. Node.js listens on loopback; browser CSS, JavaScript and Vis Network assets are local.
 
-CLOUD-M7 is a distributed forensic provenance framework tailored for heterogeneous computing architectures spanning **Edge**, **Fog**, and **Cloud** tiers. 
-
-```
-                                  +------------------------------+
-                                  |         CLOUD TIER           |
-                                  |  - Central Data Center       |
-                                  |  - Global Datastores         |
-                                  |  - Deep Causal Analytics     |
-                                  +--------------^---------------+
-                                                 |
-                                         (E_network Fog->Cloud)
-                                                 |
-                                  +--------------v---------------+
-                                  |          FOG TIER            |
-                                  |  - Regional Gateways         |
-                                  |  - Edge Cluster Nodes        |
-                                  |  - Reduction & Aggregation   |
-                                  |  - Choke-Point Containment   |
-                                  +--------------^---------------+
-                                                 |
-                                         (E_network Edge->Fog)
-                                                 |
-                                  +--------------v---------------+
-                                  |          EDGE TIER           |
-                                  |  - Resource-Constrained IoT  |
-                                  |  - Low-Latency Capture       |
-                                  |  - In-Memory Privacy Filter  |
-                                  +------------------------------+
+```mermaid
+flowchart LR
+    F[Bundled JSON / CSV or upload] --> N[Canonical normalization and validation]
+    N --> G[Register nodes then resolve parent edges]
+    G --> X[Full five-tuple and time-window correlation]
+    X --> O[Original causal DAG]
+    O --> R[Conservative repeated-read folding]
+    O --> A[Paths, multi-root and choke-point analysis]
+    R --> V[Original / reduced browser views]
+    A --> V
+    N --> P[Dataset-specific JSON and Parquet evidence]
+    P --> Q[Selected dataset DuckDB view]
+    Q --> V
+    M[Placement cost model] --> V
 ```
 
----
+## Ingestion and causal validity
 
-## 2. Mathematical Formalization
+Canonical JSON events contain `uuid`, finite Unix-seconds `timestamp`, `tier`, `host_id`, `event_type`, `payload`, and `parents`. CSV uses `payload_json` and `parents_json`. An optional supplied `tamper_hash` is checked against the canonical SHA-256 digest; otherwise it is computed. UUIDs must be unique, parents must exist, and dependencies cannot travel backward in time or form cycles. Native parsing errors include row numbers. The bounded demo accepts at most 2,000 events and 5 MB uploads.
 
-### 2.1 Unified Multi-Tier Event Representation (Equation 1)
-Every system observation across the infrastructure is normalized into a standardized tuple:
-$$\mathcal{E}_i = \langle \text{UUID}_i, \tau_i, \text{Tier}_i, \text{HostID}_i, \text{Type}_i, \mathcal{P}_i, \pi_i \rangle$$
+Batch ingestion registers every node before resolving parent UUIDs. Input order cannot silently remove parent edges. Socket correlation requires matching source IP/port, destination IP/port and protocol, different tiers, and a transit interval between zero and fifteen seconds. The resulting graph must be acyclic. Failed path lookup returns no path; chronological sorting never substitutes for causality.
 
-Where:
-- $\text{UUID}_i$: Globally unique identifier for event $i$.
-- $\tau_i$: Physical timestamp (UNIX epoch float).
-- $\text{Tier}_i \in \{\text{Edge}, \text{Fog}, \text{Cloud}\}$: Architectural stratum where the event occurred.
-- $\text{HostID}_i$: Unique identifier of the originating container, VM, or physical hardware.
-- $\text{Type}_i \in \{\text{Process}, \text{File}, \text{Socket}, \text{API}\}$: Event classification.
-- $\mathcal{P}_i$: Payload dictionary carrying granular attributes (e.g., process PID, file path, IP 5-tuple, API method).
-- $\pi_i$: Set of causal parent event UUIDs establishing direct dependency edges.
+## Reduction and evidence retention
 
-In addition, each event computes a cryptographic SHA-256 integrity hash:
-$$H_i = \text{SHA256}(\text{UUID}_i \parallel \tau_i \parallel \text{Tier}_i \parallel \text{HostID}_i \parallel \text{Type}_i \parallel \mathcal{P}_i \parallel \pi_i)$$
-This ensures tamper-evidence and forensic non-repudiation across untrusted distributed tiers.
+Fold maximal consecutive file-read chains only when each member has one predecessor and successor, host/tier and complete payload match, and a process/PID and resource are present. Branch/merge nodes, network events and incident endpoints remain separate. Deterministic folded IDs map to ordered original UUIDs; the inspector exposes every full record.
 
----
+The original DAG is authoritative for reconstruction and choke-point analysis. The reduced graph is a representation with verified source/sink reachability. Selecting paths and folding do not delete original evidence. No fixed reduction percentage is promised for arbitrary inputs.
 
-### 2.2 Tier-Adaptive Placement Optimization (Equation 2)
-Forensic task placement $x = \{x_1, \dots, x_m\}$ (where each task $x_k \in \{\text{Edge}, \text{Fog}, \text{Cloud}\}$) is formulated as a multi-objective cost minimization problem:
-$$\min_x J(x) = \alpha \cdot \text{Lat}(x) + \beta \cdot \text{BW}(x) + \gamma \cdot \text{Priv}(x) + \delta \cdot \text{Cost}(x)$$
-$$\text{subject to } C_{edge} \le C_{max}$$
+## Storage and dataset identity
 
-#### Component Definitions:
-1. **Latency Cost $\text{Lat}(x)$:** Total execution and network propagation latency required to capture, process, and query forensic data. Filtering at Edge minimizes detection latency.
-2. **Bandwidth Cost $\text{BW}(x)$:** Network egress volume consumed across tier boundaries. Moving filtering and reduction closer to the edge prevents raw event flooding.
-3. **Privacy Risk Penalty $\text{Priv}(x)$:** Quantitative exposure penalty for transmitting unmasked raw telemetry outside the local device boundary.
-4. **Infrastructure Cost $\text{Cost}(x)$:** Monetary expense incurred for cloud compute and storage resources.
-5. **Edge Capacity Constraint $C_{edge} \le C_{max}$:** Ensures CPU and RAM footprint on edge devices do not exceed local operational thresholds ($<800$ millicores CPU and $<512$ MB RAM).
+```mermaid
+flowchart LR
+    E[Normalized events in stable order] --> H[SHA-256 content identity]
+    H --> J[Dataset-ID JSON evidence]
+    H --> P[Dataset-ID Parquet evidence]
+    P --> D[Read-only DuckDB provenance view]
+    ID[Browser-selected dataset_id] --> D
+    J --> RE[Reload after cache loss]
+```
 
----
+The demo buffers events in memory and persists local files under `data/processed/datasets`. It does not implement deployed edge SQLite, Kuzu, ClickHouse or Neptune; earlier database schemas remain design material. Completed files are published atomically by content ID. SQL requires that ID, registers its records as `provenance`, permits one SELECT, and disables external file access. There is no shared last-written dataset file.
 
-### 2.3 Cross-Tier Causal Provenance Fusion (Equation 3)
-The global forensic causal graph $\mathcal{G}_{global} = (\mathcal{V}_{global}, \mathcal{E}_{global})$ is synthesized by unifying intra-tier subgraphs and cross-tier network flows:
-$$\mathcal{G}_{global} = \mathcal{G}_{edge} \cup \mathcal{G}_{fog} \cup \mathcal{G}_{cloud} \cup \mathcal{E}_{network}$$
+## Interfaces
 
-#### Cross-Tier Flow Correlation:
-A directed edge $(u, v) \in \mathcal{E}_{network}$ is established between an outbound socket event $u$ at tier $T_1$ and an inbound socket event $v$ at tier $T_2$ ($T_1 \ne T_2$) if and only if:
-1. **Network 5-Tuple Match:**
-   $$\text{IP}_{src}(u) = \text{IP}_{src}(v) \quad \land \quad \text{IP}_{dst}(u) = \text{IP}_{dst}(v)$$
-   $$\text{Port}_{dst}(u) = \text{Port}_{dst}(v) \quad \land \quad \text{Proto}(u) = \text{Proto}(v)$$
-2. **Causal Temporal Ordering:**
-   $$0 \le \tau(v) - \tau(u) \le \Delta t_{window}$$
-   where $\Delta t_{window}$ accounts for maximum network transit latency.
+| Interface | Behaviour |
+|---|---|
+| `GET /api/health` | Runtime identity and configured Python path. |
+| `GET /api/datasets` | Prepared controlled datasets. |
+| `GET /api/analyze?dataset=...&force=true` | Analyse bundled alias or persisted content ID; force bypasses Node cache. |
+| `POST /api/upload` | Multipart `dataset_file`; validate, analyse, persist, remove temporary upload. |
+| `POST /api/sql` | JSON `query` and `dataset_id`; read-only results for that ID. |
 
----
+Analysis preserves existing response fields and adds `dataset_id`, `dataset_provenance`, full `events`, `reduction`, `reduced_graph`, `folded_membership`, `folded_evidence`, and `placement`. The legacy `noise_reduction_pct` remains compatible; the UI describes exclusion from one selected path. SQL results clear on dataset changes; superseded responses are ignored.
 
-### 2.4 Causal Attack Path Reconstruction
-Given an alert or impact event $v_{target}$ (such as an unauthorized database exfiltration in the Cloud tier):
-1. **Backward Causal Traversal:** Computes all ancestral predecessors:
-   $$\text{Ancestors}(v_{target}) = \{ u \in \mathcal{V}_{global} \mid \text{Path}(u \leadsto v_{target}) \}$$
-2. **Root Cause Identification:** Isolates the earliest entry point $v_{root} \in \text{Ancestors}(v_{target})$ such that $\text{in-degree}(v_{root}) = 0$ in the attack subgraph.
-3. **Forward Blast Radius Traversal:** Computes all downstream impacted entities:
-   $$\text{Descendants}(v_{root}) = \{ w \in \mathcal{V}_{global} \mid \text{Path}(v_{root} \leadsto w) \}$$
-4. **Minimal Attack Chain Isolation:** Extracts the shortest causal path connecting $v_{root}$ to $v_{target}$, pruning away unrelated background operations.
+## Interpretation
 
----
-
-### 2.5 [NOVELTY 1] Hyperparameter-Tuned Iterative Multi-Root Causal Discovery
-Traditional single-pass backward traversal terminates immediately upon finding the first root event, leaving stealthy concurrent vectors undetected.
-
-CLOUD-M7 introduces an iterative discovery loop parameterized by $(K_{max}, \epsilon, \lambda)$:
-1. At iteration $k$, extract the active causal subgraph $\mathcal{G}_k \subseteq \mathcal{G}_{global} \setminus \bigcup_{j < k} \mathcal{P}_j$.
-2. Identify root candidate $R_k$ and evaluate its marginal impact gain:
-   $$\Delta I_k = \text{Impact}(R_k) \cdot e^{-\lambda \cdot k}$$
-3. Check the convergence criterion:
-   $$\text{If } \Delta I_k < \epsilon \quad \lor \quad k \ge K_{max} \implies \text{Terminate}$$
-4. Append trajectory $\mathcal{P}_k$ and repeat.
-
-This methodology guarantees discovery of secondary compromised hosts (e.g. `edge-sensor-02` firmware injection, `fog-gateway-01` token theft) while mathematically bounding computational complexity.
-
----
-
-### 2.6 [NOVELTY 2] Multi-Sensor Convergent Graph & Articulation Choke-Point Analysis
-In cyber-physical IoT deployments, concurrent attacks originate from disparate edge sensors and converge upon critical upstream assets.
-
-1. **Multi-Sensor Convergence Engine:** Discovers all directed paths $\mathcal{P}_{multi} = \{p_1, \dots, p_m\}$ originating from edge sensors $S = \{s_1, \dots, s_n\}$ to the target Cloud asset $t$.
-2. **Articulation Cut-Vertex Detection:** Identifies bottleneck vertices $v \in \mathcal{V}_{global}$ whose removal partitions $S$ from $t$.
-3. **Containment Efficiency Metric:**
-   $$E_{cut}(v) = \frac{|\{p \in \mathcal{P}_{multi} \mid v \in p\}|}{|\mathcal{P}_{multi}|}$$
-4. **Empirical Choke Point:** The socket connection event on `fog-gateway-01` exhibits $E_{cut} = 1.0$ (100% containment), demonstrating that security operators can quarantine a single Fog gateway node to block all multi-sensor attack vectors simultaneously.
+Processing times, graph counts and file sizes are measured. Placement latency, bandwidth, privacy, cost and capacity values are estimates. Attack labels are supplied ground truth, not predictions. Bridge and MITRE analyses are heuristic; remediation proposes commands. Docker, hardware, live eBPF and public-benchmark evaluation are later work. An unkeyed digest is not a signature or trusted log anchor.

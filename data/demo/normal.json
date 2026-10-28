@@ -1,0 +1,286 @@
+[
+  {
+    "uuid": "benign-edge-read-0",
+    "timestamp": 1700000000.5,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "d6f27aa32b6f6db9ac65c8c889b175538cab44d27c64f70c085f1b8ce3088a6d"
+  },
+  {
+    "uuid": "benign-edge-sock-out-0",
+    "timestamp": 1700000000.7,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39000,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-0"
+    ],
+    "tamper_hash": "99bf1b85159e9f7601d3ab561113323db3a0f4b84817408a97f836efc7e3182a"
+  },
+  {
+    "uuid": "benign-edge-read-1",
+    "timestamp": 1700000001.2,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "8c9d92e797a1865e825b5e1b265f1b4b79d1b3084f4ff8a837eb0df5df16e191"
+  },
+  {
+    "uuid": "benign-edge-sock-out-1",
+    "timestamp": 1700000001.4,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39001,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-1"
+    ],
+    "tamper_hash": "f87c0c63e4214c83a8b5d7b840184e54db2648177ce7e9e10d372fac46605efd"
+  },
+  {
+    "uuid": "benign-edge-read-2",
+    "timestamp": 1700000001.9,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "ffa40757b377b6337dc06ed910134160365da51e3f92e78f291f7070256de677"
+  },
+  {
+    "uuid": "benign-edge-sock-out-2",
+    "timestamp": 1700000002.1000001,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39002,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-2"
+    ],
+    "tamper_hash": "42e1eaaeb739b2d1d47776e733f2e5f1f401f1b07eae2277de89d752428bea62"
+  },
+  {
+    "uuid": "benign-edge-read-3",
+    "timestamp": 1700000002.6000001,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "File",
+    "payload": {
+      "action": "read",
+      "entity": "/sys/class/thermal/thermal_zone0/temp",
+      "process": "sensor_daemon",
+      "pid": 1042,
+      "is_attack": false,
+      "description": "Benign periodic thermal sensor reading"
+    },
+    "parents": [],
+    "tamper_hash": "61c396da2cd395c9de9c0d3f60a1330a0699e13d570b73f40cc8651c6be4aeda"
+  },
+  {
+    "uuid": "benign-edge-sock-out-3",
+    "timestamp": 1700000002.8000002,
+    "tier": "Edge",
+    "host_id": "edge-sensor-01",
+    "event_type": "Socket",
+    "payload": {
+      "action": "send",
+      "src_ip": "192.168.1.50",
+      "src_port": 39003,
+      "dst_ip": "10.0.1.1",
+      "dst_port": 1883,
+      "protocol": "TCP",
+      "bytes": 128,
+      "is_attack": false,
+      "description": "MQTT periodic metric publish to Fog gateway"
+    },
+    "parents": [
+      "benign-edge-read-3"
+    ],
+    "tamper_hash": "b2d17ef40ca5102298518e5967819a2ed454cda300ec41638376dbb80eeefa01"
+  },
+  {
+    "uuid": "benign-fog-agg-0",
+    "timestamp": 1700000003.2000003,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "b0c95203d522c16eacacc3f78052410c5419b9bfb25aeaa3395adba928d9d515"
+  },
+  {
+    "uuid": "benign-fog-agg-1",
+    "timestamp": 1700000003.6000004,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "d7deae6ca2b9f94377a96ef6ab46c48e872065172063aaa8184313ba0e1bda74"
+  },
+  {
+    "uuid": "benign-fog-agg-2",
+    "timestamp": 1700000004.0000005,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "f47e31f6e2faeccd0808d3467e840e793a977061611adabe965e9a45102a732e"
+  },
+  {
+    "uuid": "benign-fog-agg-3",
+    "timestamp": 1700000004.4000006,
+    "tier": "Fog",
+    "host_id": "fog-gateway-01",
+    "event_type": "Process",
+    "payload": {
+      "action": "exec",
+      "entity": "iot_aggregator",
+      "pid": 2180,
+      "is_attack": false,
+      "description": "Aggregating regional sensor timeseries metrics"
+    },
+    "parents": [],
+    "tamper_hash": "abd8cea1394bcb1bdb161aa79d74db32e810f8c858c7689a7fdef98ee3672382"
+  },
+  {
+    "uuid": "benign-cloud-audit-0",
+    "timestamp": 1700000005.0000005,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "551ae19450e562118b8f8dc121c7939fcc5ab530ded1dbd7a0d5972106f82b4b"
+  },
+  {
+    "uuid": "benign-cloud-audit-1",
+    "timestamp": 1700000005.6000004,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "8cd60846f09e054c47523664af9f9670887ad34f9de5a6bd596c8c202d7d2606"
+  },
+  {
+    "uuid": "benign-cloud-audit-2",
+    "timestamp": 1700000006.2000003,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "d8600b58ed2be2811f0d905cc30ad17d03e8bbaeb27fa8b81814fb847d63dfd8"
+  },
+  {
+    "uuid": "benign-cloud-audit-3",
+    "timestamp": 1700000006.8000002,
+    "tier": "Cloud",
+    "host_id": "cloud-api-prod",
+    "event_type": "API",
+    "payload": {
+      "action": "query_db",
+      "entity": "/healthz",
+      "user": "kube-probe",
+      "is_attack": false,
+      "description": "Kubernetes liveness and readiness probe check"
+    },
+    "parents": [],
+    "tamper_hash": "ad07734add69b1219bd7f728ba31a15df6370796ae8fed4d8419c0bca404e3a5"
+  }
+]

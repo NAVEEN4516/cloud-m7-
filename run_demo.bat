@@ -1,8 +1,9 @@
 @echo off
 cd /d "%~dp0"
-echo ===================================================
-echo   CLOUD-M7: Running Capstone Review 1 Live Demo
-echo ===================================================
-call .\.venv\Scripts\python.exe scripts\run_demo.py
-echo.
+if not exist ".venv\Scripts\python.exe" (
+  echo Run setup_demo.ps1 first.
+  pause
+  exit /b 1
+)
+.venv\Scripts\python.exe scripts\run_demo.py
 pause
