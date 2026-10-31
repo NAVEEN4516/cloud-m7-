@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const path = require('path');
+const fs = require('fs');
 const ROOT = path.resolve(__dirname, '../..');
 
 test('teacher walkthrough with external network blocked', async ({ page }) => {
@@ -80,4 +81,49 @@ test('dataset identity survives a server reload path and bad requests are explic
   expect((await unavailable.json()).message).toContain('not bundled');
   const unsafe = await request.post('/api/sql', { data: { dataset_id: data.dataset_id, query: 'DELETE FROM provenance' } });
   expect(unsafe.status()).toBe(400);
+});
+
+test('six advanced tracks follow selected evidence with truthful status and complete export', async ({ page }) => {
+  const external = [], errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.route('**/*', route => {
+    if (['localhost', '127.0.0.1'].includes(new URL(route.request().url()).hostname)) return route.continue();
+    external.push(route.request().url()); return route.abort();
+  });
+  await page.goto('/');
+  await expect(page.locator('#event-count')).toHaveText('92');
+  await page.getByRole('button', { name: /Advanced experiments/ }).click();
+  await expect(page.locator('#panel-advanced')).toBeVisible();
+  await expect(page.locator('.experiment')).toHaveCount(6);
+  await expect(page.locator('#advanced-summary')).toContainText('92 selected events');
+  await expect(page.locator('#hardware-attestation')).toContainText('unavailable');
+  await expect(page.locator('#advanced-entropy')).toContainText('Reachability preserved');
+  await expect(page.locator('#zk-status')).toContainText('Cryptographic proof unavailable');
+  await expect(page.locator('#shield-status')).toContainText('coverage is incomplete');
+  await expect(page.locator('#advanced-cut')).toContainText('0 of 3');
+  await expect(page.locator('#advanced-export-status')).toContainText('14 trajectory steps exported');
+  const downloaded = page.waitForEvent('download');
+  await page.locator('#download-stix').click();
+  const download = await downloaded;
+  const bundle = JSON.parse(fs.readFileSync(await download.path(), 'utf8'));
+  expect(bundle.objects.filter(o => o.type === 'attack-pattern')).toHaveLength(14);
+  const ids = new Set(bundle.objects.map(o => o.id));
+  for (const relation of bundle.objects.filter(o => o.type === 'relationship')) {
+    expect(ids.has(relation.source_ref) && ids.has(relation.target_ref)).toBeTruthy();
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: path.join(ROOT, 'output/advanced-dashboard.png'), fullPage: true });
+  await page.locator('#dataset').selectOption('normal');
+  await expect(page.locator('#event-count')).toHaveText('16');
+  await expect(page.locator('#advanced-summary')).toContainText('16 selected events');
+  await expect(page.locator('#rl-state')).toContainText('S0: NOMINAL_BENIGN');
+  await expect(page.locator('#advanced-cut')).toContainText('Not applicable');
+  await expect(page.locator('#advanced-export-status')).toContainText('0 trajectory steps exported');
+  await expect(page.locator('#advanced-stream tbody')).toContainText('16');
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+  await page.getByRole('button', { name: /SQL workspace/ }).click();
+  await page.locator('#count-sql').click(); await page.locator('#run-sql').click();
+  await expect(page.locator('#sql-result tbody')).toHaveText('16');
+  expect(external).toEqual([]); expect(errors).toEqual([]);
 });

@@ -7,7 +7,7 @@ function table(id, columns, rows) {
   $(id).innerHTML = rows.length ? `<table><thead><tr>${columns.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${row.map(x=>`<td>${esc(typeof x === 'object' ? JSON.stringify(x) : x)}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '<p style="padding:14px">No matching events or results.</p>';
 }
 function busy(active) {
-  for (const id of ['reload','upload','run-sql','dataset','download-events','download-script']) $(id).disabled = active;
+  for (const id of ['reload','upload','run-sql','dataset','download-events','download-script','download-stix']) $(id).disabled = active;
   if (active) { $('notice').textContent='Validating evidence and building analysis…'; $('error').hidden=true; }
 }
 function fail(error) { $('error').textContent=error.message; $('error').hidden=false; }
@@ -63,6 +63,7 @@ function populate(data) {
   $('bridge-results').textContent=JSON.stringify(data.novelty3_causal_bridge,null,2);
   $('mitre-results').textContent=data.novelty5_mitre.summary_text;
   $('remediation-results').textContent=data.novelty4_remediation.deployment_script;
+  renderAdvancedTracks(data);
   draw();
 }
 function inspect(id) {
@@ -119,4 +120,5 @@ $('upload').addEventListener('click',upload); $('original').addEventListener('cl
 $('run-sql').addEventListener('click',sql); $('count-sql').addEventListener('click',()=>{$('query').value='SELECT COUNT(*) AS event_count FROM provenance';});
 $('download-events').addEventListener('click',()=>{if(analysis)download('cloud-m7-evidence.json',JSON.stringify(analysis.events,null,2));});
 $('download-script').addEventListener('click',()=>{if(analysis)download('proposed-containment.sh',analysis.novelty4_remediation.deployment_script,'text/plain');});
+$('download-stix').addEventListener('click',()=>{if(analysis)download('cloud-m7-candidate-stix.json',JSON.stringify(analysis.advanced_tracks.track6_stix_streaming.stix_bundle,null,2));});
 load();

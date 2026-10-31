@@ -7,13 +7,12 @@ NVIDIA Jetson Nano, or Linux SBC) to capture live operating system and sensor ev
 Capabilities:
     1. Real Hardware Telemetry: Gathers CPU temperature, memory, disk, and sensor states.
     2. Event Normalization: Packages local events into Canonical Provenance Schema E_i.
-    3. Tamper-Proof Cryptography: Hashes events using SHA-256 before forwarding to Fog.
+    3. Canonical Digests: Hashes events using the shared schema before forwarding.
     4. Attack Simulation Mode: Injects a synthetic firmware anomaly or exfiltration event
        to demonstrate live hardware-in-the-loop attack reconstruction.
 """
 
 import argparse
-import hashlib
 import json
 import os
 import platform
@@ -21,9 +20,14 @@ import socket
 import sys
 import time
 import urllib.request
+import uuid
 from typing import Any, Dict, Optional
 
-# Fallback event structure if cloud_m7 is not installed on the remote Pi
+# Support direct script execution from a complete project checkout as well as -m.
+if __package__ in (None, ""):
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+from cloud_m7.schema.event import ProvenanceEvent
+
 def generate_hardware_event(
     event_type: str,
     action: str,
@@ -35,7 +39,7 @@ def generate_hardware_event(
     """Generates an E_i compatible provenance event dictionary on physical edge device."""
     ts = time.time()
     hostname = host_id or socket.gethostname() or "rpi-edge-sensor-01"
-    evt_uuid = f"hw-{hostname}-{int(ts * 1000)}"
+    evt_uuid = f"hw-{hostname}-{uuid.uuid4()}"
 
     payload = {
         "action": action,
@@ -47,20 +51,9 @@ def generate_hardware_event(
     if extra_payload:
         payload.update(extra_payload)
 
-    # Compute SHA-256 tamper hash
-    raw_str = f"{evt_uuid}|{round(ts, 4)}|Edge|{hostname}|{event_type}|{json.dumps(payload, sort_keys=True)}"
-    tamper_hash = hashlib.sha256(raw_str.encode("utf-8")).hexdigest()
-
-    return {
-        "uuid": evt_uuid,
-        "timestamp": ts,
-        "tier": "Edge",
-        "host_id": hostname,
-        "event_type": event_type,
-        "payload": payload,
-        "parents": [],
-        "tamper_hash": tamper_hash,
-    }
+    return ProvenanceEvent(uuid=evt_uuid, timestamp=ts, tier="Edge",
+                           host_id=hostname, event_type=event_type,
+                           payload=payload, parents=[]).to_dict()
 
 
 def read_pi_temperature() -> float:

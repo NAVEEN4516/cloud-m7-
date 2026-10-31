@@ -21,6 +21,7 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 from cloud_m7.adapters.factory import DatasetNormalizerFactory
+from cloud_m7.advanced.analysis import analyze_advanced_tracks
 from cloud_m7.adapters.canonical import DatasetValidationError
 from cloud_m7.fusion.reduction import fold_repeated_reads
 from cloud_m7.placement.demo import placement_comparison
@@ -58,7 +59,7 @@ def load_dataset_events(dataset_id: str) -> tuple[List[ProvenanceEvent], str]:
 
 def analyze_dataset(dataset_id: str) -> Dict[str, Any]:
     """Executes full multi-tier analysis across all 5 novelties and storage layer."""
-    t0 = time.time()
+    t0 = time.perf_counter()
     requested_dataset = dataset_id
     events, detected_fmt = load_dataset_events(requested_dataset)
     if len(events) > 2000:
@@ -304,9 +305,11 @@ def analyze_dataset(dataset_id: str) -> Dict[str, Any]:
     reduced_edges = [{"from": u, "to": v, "arrows": "to", "title": d.get("relation", "causal_dependency")}
         for u, v, d in reduction.graph.edges(data=True)]
 
-    total_time_ms = round((time.time() - t0) * 1000, 2)
+    advanced = analyze_advanced_tracks(
+        global_dag, events, reconstructed_steps, choke_points, mitre_matches,
+        recon_res.target_impact_uuid if recon_res else None)
 
-    return {
+    result = {
         "status": "success",
         "dataset_name": requested_dataset,
         "dataset_id": dataset_id,
@@ -319,7 +322,7 @@ def analyze_dataset(dataset_id: str) -> Dict[str, Any]:
             for node, members in reduction.membership.items() if len(members) > 1},
         "placement": placement_comparison(),
         "detected_format": detected_fmt,
-        "processing_time_ms": total_time_ms,
+        "advanced_tracks": advanced,
         "summary": {
             "total_events": len(events),
             "total_nodes": summary_stats.get("total_nodes", len(events)),
@@ -374,6 +377,8 @@ def analyze_dataset(dataset_id: str) -> Dict[str, Any]:
             "parquet_file_path": parquet_path,
         },
     }
+    result["processing_time_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+    return result
 
 
 def execute_sql(sql_query: str, dataset_id: str = "") -> Dict[str, Any]:

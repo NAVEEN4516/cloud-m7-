@@ -55,6 +55,28 @@ Native JSON contains UUID, timestamp, tier, host, event type, payload and parent
 
 Each dataset owns content-addressed JSON/Parquet files under ignored `data/processed/datasets`. SQL requires its ID and exposes original records as `provenance`. Tracked `data/demo` holds stable fixtures. Intentional regeneration uses `scripts/prepare_demo_fixtures.py`; review the resulting diff.
 
+## Integrated advanced experiments
+
+The **Advanced experiments** dashboard view integrates Dharshini's six tracks with the corrected Review 2 pipeline. It follows the current dataset selection and keeps original evidence and SQL isolated by dataset ID.
+
+| Track | Integrated behavior |
+|---|---|
+| eBPF / HPC / TPM | Explicitly simulated profiles; hardware attestation is unavailable. |
+| Entropy / temporal graph scoring | Remove only edges with an alternate causal path; label-free, fixed-weight temporal scores, not a trained detector. |
+| Q-learning containment | Simulated policy; state derives from supplied labels, with nominal handling and observed training action shares. No enforcement. |
+| ZK provenance | Proof-format simulation; verification always fails closed because no SNARK backend exists. Separate graph cut checks use actual reachability. |
+| Invariant shield | Checks real timestamps, socket tuples and supplied event digests; reports incomplete process-lineage coverage. |
+| STIX / streaming | Full primary-trajectory candidate export with internal structural checks; measured in-memory event-time aggregation with late-event handling. |
+
+The hardware producer now shares canonical hashing with native ingestion; the fog receiver rejects mismatched digests. Hardware capture remains outside the prepared laptop demo. Existing Review 2 fixtures and evidence-preserving folding are unchanged.
+
+See [integration provenance, limits and verification](docs/advanced_integration.md). The full suite currently contains **70 Python cases and three browser cases**. To run browser verification against a fresh server on a separate port:
+
+```powershell
+$env:CLOUD_M7_TEST_PORT = '3307'
+npm run test:e2e --prefix web_dashboard
+```
+
 ## Existing modules and later phases
 
 Public dataset adapters, Streamlit, hardware scripts, Docker configuration, bridge heuristics, MITRE rules and remediation templates remain available. Supplementary views explicitly label hypotheses and command proposals. Public benchmark captures are not bundled. Docker, live eBPF and physical-device integration are later work.

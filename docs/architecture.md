@@ -10,8 +10,10 @@ flowchart LR
     X --> O[Original causal DAG]
     O --> R[Conservative repeated-read folding]
     O --> A[Paths, multi-root and choke-point analysis]
+    O --> E[Six experimental analyses on selected evidence]
     R --> V[Original / reduced browser views]
     A --> V
+    E --> V
     N --> P[Dataset-specific JSON and Parquet evidence]
     P --> Q[Selected dataset DuckDB view]
     Q --> V
@@ -55,6 +57,8 @@ The demo buffers events in memory and persists local files under `data/processed
 | `POST /api/sql` | JSON `query` and `dataset_id`; read-only results for that ID. |
 
 Analysis preserves existing response fields and adds `dataset_id`, `dataset_provenance`, full `events`, `reduction`, `reduced_graph`, `folded_membership`, `folded_evidence`, and `placement`. The legacy `noise_reduction_pct` remains compatible; the UI describes exclusion from one selected path. SQL results clear on dataset changes; superseded responses are ignored.
+
+`advanced_tracks` contains all six integrated experimental results. Each analysis runs once in `cloud_m7/advanced/analysis.py`, against the same original DAG and selected records. `advanced_tracks.processing_time_ms` measures the complete experimental calculation; top-level `processing_time_ms` includes the experimental results and placement construction, while excluding JSON serialization, process startup and HTTP/browser overhead. Experiments do not replace the authoritative graph, repeated-read reduction or dataset-scoped SQL. See [advanced integration](advanced_integration.md) for each track's actual guarantees and limitations.
 
 ## Interpretation
 

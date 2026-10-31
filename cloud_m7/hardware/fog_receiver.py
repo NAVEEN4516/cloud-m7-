@@ -3,7 +3,7 @@ Fog Gateway Hardware Ingestion & Aggregation Server.
 
 Runs on an intermediate hardware node (e.g. Laptop, Mini-PC, or gateway router)
 to receive incoming telemetry from physical Edge probes (Raspberry Pis),
-aggregate and verify SHA-256 signatures, and feed the global graph engine.
+aggregate and check canonical SHA-256 digests, and feed the graph engine.
 """
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -28,6 +28,8 @@ class FogTelemetryHandler(BaseHTTPRequestHandler):
         try:
             data = json.loads(post_data.decode("utf-8"))
             evt = ProvenanceEvent.from_dict(data)
+            if not data.get("tamper_hash") or evt.tamper_hash != evt.compute_integrity_hash():
+                raise ValueError("Missing or mismatched canonical event digest")
             FogTelemetryHandler.received_events.append(evt)
 
             self.send_response(200)
